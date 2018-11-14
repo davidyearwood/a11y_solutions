@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray">
+    <div class="container bg-white p-1">
+        <h1 class="page-title">Resource Library</h1>
+        <form action="" id="search-form" method="GET" class="search-form">
+            <div class="input-wrapper">
+                <input type="text" id="search-input" class="search-form__input" autocomplete="off" aria-owns="autcomplete-list" aria-label="Search for resource here">
+                <ul id="autocomplete-list" class="autocomplete-list" role="listbox" tabindex="0">
+                </ul>
+            </div>
+            <button type="submit" class="search-form__btn">Search</button>
+        </form>
+        <ul class="resources">
+            <li class="resources__item" data-resource-item="Appointments"><a href="#" class="resources__link">Appointments</a></li>
+            <li class="resources__item" data-resource-item="Consult referrals"><a href="#" class="resources__link">Consult referrals</a></li>
+            <li class="resources__item" data-resource-item="Coverage"><a href="#" class="resources__link">Coverage</a></li>
+            <li class="resources__item" data-resource-item="Cultural competence"><a href="#" class="resources__link">Cultural competence</a></li>
+            <li class="resources__item" data-resource-item="Disclosing unanticipated outcomes"><a href="#" class="resources__link">Disclosing unanticipated outcomes</a></li>
+            <li class="resources__item" data-resource-item="Disruptive physicians and other clinicians"><a href="#" class="resources__link">Disruptive physicians and other clinicians</a></li>
+            <li class="resources__item" data-resource-item="Documentation"><a href="#" class="resources__link">Documentation</a></li>
+            <li class="resources__item" data-resource-item="Electronic medical records"><a href="#" class="resources__link">Electronic medical records</a></li>
+            <li class="resources__item" data-resource-item="EMR downtime"><a href="#" class="resources__link">EMR downtime</a></li>
+            <li class="resources__item" data-resource-item="Ending the physician-patient relationship"><a href="#" class="resources__link">Ending the physician-patient relationship</a></li>
+        </ul>
+    </div>
+    <script src="search.js"></script>
+</body>
+
+</html>
