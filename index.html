@@ -2,13 +2,14 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width">    
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray">
     <div class="container bg-white p-1">
         <h1 class="page-title">Resource Library</h1>
-        <form action="" id="search-form" method="GET" class="search-form">
+        <form action="" id="search-form" method="GET" class="search-form" style="margin-bottom: 2.5rem">
             <div class="input-wrapper">
                 <input type="text" id="search-input" class="search-form__input" autocomplete="off" aria-owns="autcomplete-list" aria-label="Search for resource here">
                 <ul id="autocomplete-list" class="autocomplete-list" role="listbox" tabindex="0">
@@ -30,6 +31,7 @@
         </ul>
     </div>
     <script src="search.js"></script>
+    <script src="js/autocomplete.js"></script>
 </body>
 
 </html>
