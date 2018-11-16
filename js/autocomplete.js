@@ -5,6 +5,14 @@
   }
 
   // variables 
+  var code = {
+    DOWN_KEY: 40,
+    UP_KEY: 38,
+    ESCAPE_KEY: 27,
+    ENTER_KEY: 13
+  };
+
+  var counter = 0;
   var resources = Array.prototype.slice.call(document.querySelectorAll(".resources__item"));
   var autocomplete = document.getElementById("autocomplete-list");
   var searchForm = document.getElementById("search-form");
@@ -12,6 +20,7 @@
   var suggestions = resources.map(function (resource) {
     return resource.getAttribute("data-resource-item");
   });
+
 
   // Helpers
   function filterSuggestions(suggestions, value) {
@@ -28,13 +37,20 @@
     listItem.setAttribute("role", "option");
     listItem.setAttribute("tabindex", "-1");
     listItem.setAttribute("data-autocomplete-item", item);
+    listItem.setAttribute("aria-selected", "false");
+    listItem.setAttribute("id", "item-" + item);
     listItem.appendChild(document.createTextNode(item));
 
     return listItem;
   }
 
-  function getSuggestions(suggestion) {
+  function getSuggestionsByInput(input) {
+    var filteredSuggestions = filterSuggestions(suggestions, input);
 
+    return filteredSuggestions.length > 0 ?
+      filteredSuggestions.map(function (suggestion) {
+        return createHTMLSuggestion(suggestion);
+      }) : [];
   }
 
   // Views
@@ -69,24 +85,81 @@
       autocomplete.classList.remove("autocomplete-list--is-active");
     }
 
-    var filteredSuggestions = filterSuggestions(suggestions, userInput);
-    var htmlSuggestions = filteredSuggestions.length > 0 ?
-      filteredSuggestions.map(function (suggestion) {
-        return createHTMLSuggestion(suggestion);
-      }) : [];
+    var htmlSuggestions = getSuggestionsByInput(userInput);
 
     if (htmlSuggestions.length <= 0) {
       autocomplete.classList.remove("autocomplete-list--is-active");
     }
 
+    if (autocomplete.classList.contains("autocomplete-list--is-active")) {
+      searchInput.setAttribute("aria-expanded", "true");
+    } else {
+      searchInput.setAttribute("aria-expanded", "false");
+    }
+
     renderAutoComplete(htmlSuggestions);
   }
 
-  function isEmpty() {
-    return item == false; 
+  function arrowing(keyCode) {
+    var items = document.getElementsByClassName("autocomplete-list__item");
+    var activeElement = document.activeElement;
+
+    if (items.length === 0) {
+      return false;
+    }
+
+    if (keyCode === code.DOWN_KEY) {
+      if (activeElement.classList.contains("search-form__input")) {
+        activeElement = items[0];
+      } else {
+        activeElement.setAttribute("aria-selected", "false");
+        activeElement = activeElement.nextElementSibling ? activeElement.nextElementSibling : searchInput;
+      }
+    }
+
+    if (keyCode === code.UP_KEY) {
+      if (activeElement.classList.contains("search-form__input")) {
+        activeElement = items[items.length - 1];
+      } else {
+        activeElement.setAttribute("aria-selected", "false");
+        activeElement = activeElement.previousElementSibling ? activeElement.previousElementSibling : searchInput;
+      }
+    }
+
+
+    activeElement.setAttribute("aria-selected", "true");
+    activeElement.focus();
+    console.log(activeElement);
+    return activeElement;
   }
+
+  function handleAutocompleteKeydown(e) {
+    switch (e.keyCode) {
+      case code.DOWN_KEY:
+        e.preventDefault();
+        arrowing(e.keyCode);
+        break;
+      case code.UP_KEY:
+        e.preventDefault();
+        arrowing(e.keyCode);
+        break;
+      case code.ESCAPE_KEY:
+        autocomplete.classList.remove("autocomplete-list--is-active")
+        searchInput.focus();
+        break;
+      case code.ENTER_KEY:
+        var activeElement = document.activeElement;
+        autocomplete.classList.remove("autocomplete-list--is-active")
+        searchInput.value = activeElement.classList.contains("autocomplete-list__item") ?
+          activeElement.getAttribute("data-autocomplete-item") :
+          searchInput.value;
+        break;
+    }
+  }
+
   // Event listeners 
   searchForm.addEventListener("input", handleSearchInput);
   autocomplete.addEventListener("click", handleAutocompleteClick);
-
+  searchInput.addEventListener("keydown", handleAutocompleteKeydown);
+  autocomplete.addEventListener("keydown", handleAutocompleteKeydown);
 })(window);
